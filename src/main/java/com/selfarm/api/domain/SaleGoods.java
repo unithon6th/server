@@ -35,7 +35,7 @@ public class SaleGoods {
     @Column
     private int sales_amount;
 
-    @Column(insertable = false)
+    @Column
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date harvest_date;
 
