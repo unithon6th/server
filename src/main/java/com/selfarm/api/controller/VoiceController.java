@@ -1,5 +1,6 @@
 package com.selfarm.api.controller;
 
+import com.selfarm.api.domain.PurchaseGoods;
 import com.selfarm.api.domain.Voice;
 import com.selfarm.api.service.VoiceService;
 import io.swagger.annotations.Api;
@@ -30,5 +31,20 @@ public class VoiceController {
             e.printStackTrace();
             return "save fail";
         }
+    }
+
+    @ApiOperation(value = "voice text", notes = "return random voice text")
+    @RequestMapping(value = "voiceText", method = RequestMethod.POST)
+    public String voicePOST(@RequestBody PurchaseGoods goods){
+        String voiceText = null;
+
+        try{
+            voiceText = voiceService.textSampling(goods);
+        } catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+        return voiceText;
     }
 }

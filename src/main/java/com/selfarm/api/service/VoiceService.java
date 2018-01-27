@@ -1,7 +1,11 @@
 package com.selfarm.api.service;
 
+import com.selfarm.api.domain.PurchaseGoods;
+import com.selfarm.api.domain.SaleGoods;
 import com.selfarm.api.domain.Voice;
+import com.selfarm.api.persistence.SaleGoodsRepository;
 import com.selfarm.api.persistence.VoiceRepository;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +26,9 @@ public class VoiceService {
     @Autowired
     VoiceRepository voiceRepository;
 
+    @Autowired
+    SaleGoodsRepository saleGoodsRepository;
+
     @Value("${weatherApi.key}")
     private String key;
 
@@ -30,15 +37,92 @@ public class VoiceService {
 
     public void save(Voice voice){ voiceRepository.save(voice); }
 
-    public void weatherTest() throws Exception{
-        JSONObject jsonObject = readJsonFromUrl(uriBase + key);
-        JSONObject jsonObject1 = jsonObject.getJSONObject("main");
+    public String textSampling(PurchaseGoods goods) throws Exception{
+        SaleGoods saleGoods = saleGoodsRepository.findBySgid(goods.getSgid());
 
-        int temp = jsonObject1.getInt("temp");
-        System.out.println(temp - 273);
+        long calDate = saleGoods.getHarvest_date().getTime() - goods.getPurchase_date().getTime();
+        long calDateDays = calDate / (24 * 60 * 60 * 1000);
+
+        int dday = (int)(Math.abs(calDateDays));
+        int random;
+
+        if(dday == 0 || dday == 1 || dday == 50 || dday == 100){
+            random = (int)(Math.random() * 3);
+        } else{
+            random = (int)(Math.random() * 2);
+        }
+
+        String voiceText = null;
+
+        switch (random){
+            case 1:
+                voiceText = weatherText();
+                break;
+
+            case 2:
+                voiceText = tempText();
+                break;
+
+            case 3:
+                voiceText = DdayText(dday);
+                break;
+
+            default:
+                break;
+        }
+
+        return voiceText;
     }
 
-    public static JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
+    public String tempText() throws IOException{
+        JSONObject jsonObject = readJsonFromUrl(uriBase + key).getJSONObject("main");
+
+        int temp = jsonObject.getInt("temp") - 273; // 절대 온도 데이터이므로 -273
+        // System.out.println(temp - 273);
+        String statusParam;
+
+        if(temp < 0){
+            statusParam = "0C";
+        } else if(temp < 10){
+            statusParam = "10C";
+        } else if(temp < 20){
+            statusParam = "20C";
+        } else{
+            statusParam = "30C";
+        }
+
+        Voice voice = voiceRepository.findByStatus(statusParam);
+
+        return voice.getVoicetext();
+    }
+
+    public String weatherText() throws IOException{
+        JSONObject jsonObject = readJsonFromUrl(uriBase + key);
+        JSONArray jsonArray = jsonObject.getJSONArray("weather");
+
+        JSONObject tempObject = jsonArray.getJSONObject(0);
+        String weather = tempObject.getString("main");
+
+        String statusParam = weather;
+
+        Voice voice = voiceRepository.findByStatus(statusParam);
+
+        return voice.getVoicetext();
+    }
+
+    public String DdayText(int dday){
+        String statusParam = "D" + Integer.toString(dday);
+
+        Voice voice = voiceRepository.findByStatus(statusParam);
+
+        if(voice.getVoicetext() == null){
+
+        }
+
+        return voice.getVoicetext();
+    }
+
+    private JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
         InputStream is = new URL(url).openStream();
 
         try {
@@ -51,7 +135,7 @@ public class VoiceService {
         }
     }
 
-    private static String readAll(Reader rd) throws IOException {
+    private String readAll(Reader rd) throws IOException {
         StringBuilder sb = new StringBuilder();
         int cp;
         while ((cp = rd.read()) != -1) {

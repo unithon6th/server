@@ -35,7 +35,7 @@ public class SaleController {
         }
     }
 
-    @ApiOperation(value = "findAll", notes = "select all sale goods")
+    @ApiOperation(value = "findAll", notes = "판매 상품 목록 보여주는 API")
     @RequestMapping(value = "findAll", method = RequestMethod.GET)
     public List<SaleGoods> findAll(){ return saleGoodsService.findAll(); }
 }

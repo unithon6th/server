@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SaleGoodsRepository extends JpaRepository<SaleGoods, Long> {
+    SaleGoods findBySgid(Long sgid);
 }

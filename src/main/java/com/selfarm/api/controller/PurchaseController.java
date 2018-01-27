@@ -2,6 +2,7 @@ package com.selfarm.api.controller;
 
 import com.selfarm.api.domain.PurchaseGoods;
 import com.selfarm.api.domain.SaleGoods;
+import com.selfarm.api.dto.DetailResponse;
 import com.selfarm.api.service.PurchaseGoodsService;
 import com.selfarm.api.service.SaleGoodsService;
 import io.swagger.annotations.Api;
@@ -37,7 +38,19 @@ public class PurchaseController {
         }
     }
 
-    @ApiOperation(value = "findAll", notes = "select all sale goods")
+    @ApiOperation(value = "findAll", notes = "구매 상품 목록 보여주는 API")
     @RequestMapping(value = "findAll", method = RequestMethod.GET)
     public List<PurchaseGoods> findAll(){ return purchaseGoodsService.findAll(); }
+
+    @ApiOperation(value = "goodsDetail", notes = "구매 상품 상세정보 보여주는 API (음성텍스트 리스트와 D-DAY 리턴)")
+    @RequestMapping(value = "detail", method = RequestMethod.POST)
+    public DetailResponse goodsDetail(@RequestBody PurchaseGoods goods){
+
+        try {
+            return purchaseGoodsService.goodsDetail(goods);
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

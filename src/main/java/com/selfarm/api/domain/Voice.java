@@ -22,7 +22,7 @@ public class Voice {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
-    private Long id;
+    private Long voiceid;
 
     @Column
     private String status;
