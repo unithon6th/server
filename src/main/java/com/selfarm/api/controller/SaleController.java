@@ -26,6 +26,7 @@ public class SaleController {
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public String saveSaleGoods(@RequestBody SaleGoods saleGoods){
         try {
+            SaleGoods goods = SaleGoods.build(saleGoods);
             saleGoodsService.save(saleGoods);
             return "save success";
         } catch (Exception e) {

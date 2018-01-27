@@ -51,4 +51,14 @@ public class SaleGoods {
                 .image(image)
                 .build();
     }
+
+    public static SaleGoods build(SaleGoods saleGoods) {
+        return SaleGoods.builder()
+                .name(saleGoods.name)
+                .sales_price(saleGoods.sales_price)
+                .sales_amount(saleGoods.sales_amount)
+                .harvest_date(saleGoods.harvest_date)
+                .image(saleGoods.image)
+                .build();
+    }
 }
