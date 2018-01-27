@@ -18,7 +18,7 @@ public class IndexController {
 
     @RequestMapping("/")
     public ResponseEntity<String> hello() {
-        return ResponseEntity.ok("30DoC's Server");
+        return ResponseEntity.ok("Selfarm's Server");
     }
 
     @RequestMapping("/selfarm")

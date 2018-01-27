@@ -16,7 +16,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @EntityListeners(value = { AuditingEntityListener.class })
-@Table(name="sample")
+@Table(name="samplevo")
 public class SampleVO {
 
     @Id

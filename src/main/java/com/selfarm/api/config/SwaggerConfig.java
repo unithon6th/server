@@ -20,7 +20,7 @@ public class SwaggerConfig {
     public Docket restApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.thirty.api.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.selfarm.api.controller"))
                 .paths(PathSelectors.ant("/api/v1/**"))
                 .build()
                 .apiInfo(apiInfo());
@@ -29,8 +29,8 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Nexters Thirty Degrees Celsius REST API")
-                .description("ThirtyDoC server api")
+                .title("Unithon 6th Selfarm REST API")
+                .description("selfarm server api")
                 .build();
     }
 }
