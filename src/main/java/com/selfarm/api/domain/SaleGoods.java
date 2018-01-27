@@ -25,7 +25,7 @@ public class SaleGoods implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
-    private Long sgix3d;
+    private Long sgid;
 
     @Column
     private String name;
